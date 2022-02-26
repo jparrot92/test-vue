@@ -21,4 +21,20 @@ describe('Counter Component', () => {
     expect(h2Value).toBe('Counter')
 
   })
+
+  test('el calor por defecto debe de ser 100 en el p', () =>{
+
+    // Wrapper
+    const wrapper = shallowMount(Counter)
+
+    // pTags
+    // const pTags = wrapper.findAll('p')
+    const value = wrapper.find('[data-testid="counter"]').text()
+
+    // expect segundo p === 100
+    // expect(pTags[1].text()).toBe('100')
+    expect(value).toBe('100')
+  })
+
+
 })
