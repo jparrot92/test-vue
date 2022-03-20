@@ -54,6 +54,7 @@ export default {
             if( !value.includes('?') ) return
 
             this.isValidQuestion = true
+            console.log({value})
 
             // TODO: Realizar petición http
             this.getAnswer()

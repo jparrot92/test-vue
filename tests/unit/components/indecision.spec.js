@@ -6,10 +6,20 @@ describe('Indecision Component', () => {
   let wrapper
   let clgSpy
 
+  global.fetch = jest.fn(()=> Promise.resolve({
+    json: () => Promise.resolve({
+      answer: 'yes',
+      forced: false,
+      image: 'https://yesno.wtf/assets/yes/0-c44a7789d54cbdcad867fb7845ff03ae.gif'
+    })
+  }))
+
   beforeEach(()=>{
     wrapper = shallowMount(Indecision)
 
     clgSpy = jest.spyOn(console, 'log')
+
+    jest.clearAllMocks()
 
   })
 
@@ -29,12 +39,28 @@ describe('Indecision Component', () => {
 
   })
 
-  test('escribir el simbolo de "?" debe de disparar el fetch', () => {
-    
+  test('escribir el simbolo de "?" debe de disparar el getAnswer', async () => {
+
+    const getAnswerSpy = jest.spyOn(wrapper.vm, 'getAnswer')
+
+    const input = wrapper.find('input')
+    await input.setValue('Hola Mundo?')
+
+    expect(clgSpy).toHaveBeenCalledTimes(2)
+    expect(getAnswerSpy).toHaveBeenCalled()
+
   })
 
-  test('pruebas en getAnswer', () => {
+  test('pruebas en getAnswer', async() => {
     
+    await wrapper.vm.getAnswer()
+
+    const img = wrapper.find('img')
+
+    expect(img.exists()).toBeTruthy()
+    expect(wrapper.vm.img).toBe('https://yesno.wtf/assets/yes/0-c44a7789d54cbdcad867fb7845ff03ae.gif')
+    expect(wrapper.vm.answer).toBe('Si!')
+
   })
 
   test('pruebas en getAnswer - Fallo en el API', () => {
